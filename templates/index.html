@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seating Layout Correction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS 파일 -->
+    <link rel="stylesheet" href="static/css/main.css">
+</head>
+
+<body>
+    <div class="display-5 text-center">
+        <2024 신관 스터디 카페 자리배치표>
+    </div>
+
+    <br>
+
+    <div class="container-fluid padded-container">
+        <div class="row text-center">
+            <!-- First row: 7 seats -->
+            <div class="col seat">{{ seats.get(31,'Empty') }}</div>
+            <div class="col seat">{{ seats.get(30,'Empty') }}</div>
+            <div class="col seat">{{ seats.get(29,'Empty') }}</div>
+            <div class="col seat">{{ seats.get(28,'Empty') }}</div>
+            <div class="col seat">{{ seats.get(27,'Empty') }}</div>
+            <div class="col seat">{{ seats.get(26,'Empty') }}</div>
+            <div class="col seat">{{ seats.get(25,'Empty') }}</div>
+        </div>
+
+        <br>
+
+        <!-- Following rows: 1x3 and 2x4 seats -->
+        <!-- Second row with specific spacing -->
+        <div class="row text-center">
+            <div class="col-1 seat">{{ seats.get(32,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(24,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(20,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(16,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(12,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(8,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(4,'Empty') }}</div>
+            <div class="col spacer"></div>
+        </div>
+        <!-- Third row -->
+        <div class="row text-center">
+            <div class="col-1 seat">{{ seats.get(33,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(23,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(19,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(15,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(11,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(7,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(3,'Empty') }}</div>
+            <div class="col spacer"></div>
+        </div>
+        <!-- Fourth row -->
+        <div class="row text-center">
+            <div class="col-1 seat">{{ seats.get(34,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(22,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(18,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(14,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(10,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(6,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(2,'Empty') }}</div>
+            <div class="col spacer"></div>
+        </div>
+        <!-- Fifth row -->
+        <div class="row text-center">
+            <div class="col-1 seat" style="visibility: hidden;">void</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(21,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(17,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(13,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(9,'Empty') }}</div>
+            <div class="col spacer"></div>
+            <div class="col-1 seat">{{ seats.get(5,'Empty') }}</div>
+            <div class="col-1 seat">{{ seats.get(1,'Empty') }}</div>
+            <div class="col spacer"></div>
+        </div>
+        <br>
+        <br>
+        <!-- some extra parts -->
+        <div class="d-flex flex-row-reverse">
+            <div class="col-1 seat custom-height custom-background">입구</div>
+        </div>
+    </div>
+    
+    <br>
+    
+    <!--! 여기서부터 버튼 모음! -->
+    <div class="padded-container"><div class="row">
+        <div class="col">
+            <a href="/checkin" class="btn btn-success btn-lg">입실</a>
+        </div>
+        <div class="col">
+            <a href="/checkout" class="btn btn-danger btn-lg">퇴실</a>
+        </div>
+        <div class="col">
+            <a href="/add_student" class="btn btn-info btn-lg">신규 등록</a>
+        </div>
+        <div class="col">
+            <a href="/" class="btn btn-warning btn-lg">학생 제거</a>
+        </div>
+    </div></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

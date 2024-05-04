@@ -1,0 +1,33 @@
+.seat {
+    height: 80px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3px;
+}
+
+.row:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.col,
+.col-1,
+.col-3 {
+    padding: 0;
+    /* Remove padding for visual alignment */
+}
+
+.padded-container {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.custom-height {
+    height: 50px;
+}
+
+.custom-background {
+    background-color: #c4e2ff;
+}

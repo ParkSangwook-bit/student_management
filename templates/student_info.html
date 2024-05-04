@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <button onclick="fetchStudentInfo(2)">Load Student Info</button>
+    <!-- student_id가 2인 학생의 정보를 불러오는 버튼. -->
+    <div id="student-info"></div>
+
+    <script>
+        function fetchStudentInfo(studentId) {
+            $.ajax({
+                url: `/api/students/${studentId}`,
+                type: 'GET',
+                success: function (data) {
+                    $('#student-info').html(
+                    `<p>Student ID: ${data.studentid}</p>
+                     <p>Name: ${data.name}</p>
+                     <p>Phone: ${data.phonenumber}</p>
+                     <p>Seat: ${data.seatnumber}</p>`
+                    );
+                },
+                error: function (xhr, status, error) {
+                    $('#student-info').html(`<p>An error occurred:${xhr.responseText}</p>`);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
