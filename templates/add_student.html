@@ -13,19 +13,14 @@
 <body>
     <div class="display-5 text-center">학생 정보 신규 등록</div>
 
-    <div class="display-5" style="font-family: pretendard; font-style: italic; color: chocolate;">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for message in messages %}
-        <!-- error 메세지 -->
-        <div class="alert alert-danger alert-dismissible fade show" role="" alert>
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show" role="alert">
+        {{ messages[0][1] }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    {% endif %}
+    {% endwith %}
 
     <div class="container-fluid" style="padding: 5rem;">
         <div class="container mt-5">
@@ -69,7 +64,7 @@
         document.getElementById('student-form').addEventListener('submit', function (e) {
             e.preventDefault(); // 폼의 기본 제출 이벤트를 방지한다.
             const formData = new FormData(this); // 폼 데이터를 새로운 FormData 객체로 생성한다.
-            fetch('api/students', { // fetch API 함수를 사용하여 비동기 요청을 보낸다.
+            fetch('api/api_add_students', { // fetch API 함수를 사용하여 비동기 요청을 보낸다.
                 method: 'POST', // POST 메서드로 요청을 보낸다.
                 body: JSON.stringify(Object.fromEntries(formData)), // 폼 데이터를 JSON 문자열로 변환
                 headers: {

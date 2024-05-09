@@ -4,11 +4,24 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Session
 from flask_bootstrap import Bootstrap
 from flask_migrate import Migrate
+import configparser
 
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@localhost/mydatabase'
+
+config = configparser.ConfigParser()
+config.read('config/database.ini')
+secret_key = config['flask']['SECRET_KEY']  # 시크릿 키를 가져옴
+db_user = config['postgresql']['user']
+db_password = config['postgresql']['password']
+db_host = config['postgresql']['host']
+db_port = config['postgresql']['port']
+db_name = config['postgresql']['database']
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = secret_key
+
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 CORS(app) # CORS 설정
@@ -41,17 +54,21 @@ def student_info():
 # 학생 정보를 등록하는 페이지
 @app.route('/add_student', methods=['GET'])
 def add_student():
-    # 현재 할당되어있는 좌석
-    occupied_seats = [student.seatnumber for student in db.session.query(Students.seatnumber).all()]
-    # 모든 좌석 개수
-    all_seats = set(range(1, 35))
-    # 할당 가능한 좌석
-    available_seats = list(all_seats - set(occupied_seats))
-    if (available_seats == []): # 모든 좌석이 할당되어있을 경우
-        flash("할당 가능한 좌석이 없습니다.", category="error")   # 경고 메시지 출력
+    try:
+        # 현재 할당되어있는 좌석
+        occupied_seats = [student.seatnumber for student in db.session.query(Students.seatnumber).all()]
+        # 모든 좌석 개수
+        all_seats = set(range(1, 35))
+        # 할당 가능한 좌석
+        available_seats = list(all_seats - set(occupied_seats))
+        if not available_seats: # 리스트가 비어있으면
+            flash("할당 가능한 좌석이 없습니다.", category="warning")   # 경고 메시지 출력
+            return redirect(url_for('index'))
+        return render_template('add_student.html', available_seats=available_seats)
+    except Exception as e: 
+        flash(f"오류발생: {str(e)}", category="error")  # 에러 메시지 출력
         return redirect(url_for('index'))
     
-    return render_template('add_student.html', available_seats=available_seats)
 
 '''
 *********************
@@ -109,7 +126,7 @@ def api_get_student_from_seat(seatnumber):
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
 # 학생을 등록하는 api 함수
-@app.route('/api/students', methods=['POST'])
+@app.route('/api/api_add_students', methods=['POST'])
 def api_add_student():
     try:
         data = request.get_json()
@@ -176,4 +193,4 @@ def seats():
         print("seats() error: " + e)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
