@@ -9,21 +9,21 @@
 </head>
 
 <body>
-    <button onclick="fetchStudentInfo(2)">Load Student Info</button>
+    <button onclick="fetchStudentInfo(1)">Load Student Info</button>
     <!-- student_id가 2인 학생의 정보를 불러오는 버튼. -->
     <div id="student-info"></div>
 
     <script>
         function fetchStudentInfo(studentId) {
             $.ajax({
-                url: `/api/students/${studentId}`,
+                url: `/api/students/id/${studentId}`,
                 type: 'GET',
                 success: function (data) {
                     $('#student-info').html(
-                    `<p>Student ID: ${data.studentid}</p>
+                    `<p>Student ID: ${data.student_id}</p>
                      <p>Name: ${data.name}</p>
-                     <p>Phone: ${data.phonenumber}</p>
-                     <p>Seat: ${data.seatnumber}</p>`
+                     <p>Phone: ${data.phone_number}</p>
+                     <p>Seat: ${data.seat_number}</p>`
                     );
                 },
                 error: function (xhr, status, error) {

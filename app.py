@@ -69,6 +69,11 @@ def add_student():
         flash(f"오류발생: {str(e)}", category="error")  # 에러 메시지 출력
         return redirect(url_for('index'))
     
+# 학생 정보를 수정하는 페이지
+@app.route('/edit_student')
+def edit_student():
+    return render_template('edit_student.html')
+    
 
 '''
 *********************
@@ -85,45 +90,88 @@ def api_checkin():
 def api_checkout():
     return redirect(url_for('index'))
 
-# 학생 아이디로부터 학생 정보를 가져오는 api함수
-@app.route('/api/students/<int:studentid>', methods=['GET'])
-def api_get_student(studentid):
-    try:
-        with Session() as session:
-            student = session.get(Students, studentid)  # 데이터베이스 세션에서 학생 아이디로 정보를 가져옴
-            if not student:
-                return jsonify({'error': 'Student not found'}), 404
-            student_data= {
-                'student_id': student.studentid,
-                'name': student.name,
-                'phone_number': student.phonenumber,
-                'seat_number': student.seatnumber
-            }
-            return jsonify(student_data)
-    except Exception as e:
-        return jsonify({'error': 'Server error', 'message': str(e)}), 500
+# # 학생 아이디로부터 학생 정보를 가져오는 api함수
+# @app.route('/api/students/<int:studentid>', methods=['GET'])
+# def api_get_student(studentid):
+#     try:
+#         with Session() as session:
+#             student = session.get(Students, studentid)  # 데이터베이스 세션에서 학생 아이디로 정보를 가져옴
+#             if not student:
+#                 return jsonify({'error': 'Student not found'}), 404
+#             student_data= {
+#                 'student_id': student.studentid,
+#                 'name': student.name,
+#                 'phone_number': student.phonenumber,
+#                 'seat_number': student.seatnumber
+#             }
+#             return jsonify(student_data)
+#     except Exception as e:
+#         return jsonify({'error': 'Server error', 'message': str(e)}), 500
     
-# 좌석번호로부터 학생 정보를 가져오는 api 함수
-@app.route('/api/students/<int:seatnumber>', methods=['GET'])
-def api_get_student_from_seat(seatnumber):
+# # 좌석번호로부터 학생 정보를 가져오는 api 함수
+# @app.route('/api/students/<int:seatnumber>', methods=['GET'])
+# def api_get_student_from_seat(seatnumber):
+#     try:
+#         # 컨텍스트 매니저를 사용하여 데이터베이스 관련 세션을 시작
+#         with Session() as session:
+#             student = session.get(Students, seatnumber)  # 데이터베이스 세션에서 학생 좌석번호로 정보를 가져옴
+#             if not student:
+#                 return jsonify({'error': 'Student not found'}), 404
+#             # 컨텍스트 내에서 모든 데이터를 로드하면 세션은 자동으로 닫힘
+#             student_data = {
+#                 'student_id': student.studentid,
+#                 'name': student.name,
+#                 'phone_number': student.phonenumber,
+#                 'seat_number': student.seatnumber
+#             }
+#             # 세션 외부에서 데이터 반환
+#             return jsonify(student_data)
+#     except Exception as e:
+#         # 에러 발생 시에 세션은 여전히 컨텍스트 관리자에 의해 닫힌다
+#         return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
+# 학생 정보로부터 학생 정보를 가져오는 api 함수
+# '**kwargs'는 키워드 인자를 딕셔너리로 받음
+# 메서드 오버라이드용 베이스 함수
+def get_student_by(session, **kwargs):
     try:
-        # 컨텍스트 매니저를 사용하여 데이터베이스 관련 세션을 시작
-        with Session() as session:
-            student = session.get(Students, seatnumber)  # 데이터베이스 세션에서 학생 좌석번호로 정보를 가져옴
-            if not student:
-                return jsonify({'error': 'Student not found'}), 404
-            # 컨텍스트 내에서 모든 데이터를 로드하면 세션은 자동으로 닫힘
-            student_data = {
-                'student_id': student.studentid,
-                'name': student.name,
-                'phone_number': student.phonenumber,
-                'seat_number': student.seatnumber
-            }
-            # 세션 외부에서 데이터 반환
-            return jsonify(student_data)
+        student = db.session.query(Students).filter_by(**kwargs).first()
+        if not student:
+            return jsonify({'error': 'Student not found'}), 404
+        student_data = {
+            'student_id': student.studentid,
+            'name': student.name,
+            'phone_number': student.phonenumber,
+            'seat_number': student.seatnumber
+        }
+        return jsonify(student_data)
     except Exception as e:
-        # 에러 발생 시에 세션은 여전히 컨텍스트 관리자에 의해 닫힌다
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
+# 아이디로부터 학생 정보를 가져오는 api 함수 @오버라이드
+@app.route('/api/students/id/<int:studentid>', methods=['GET'])
+def api_get_student_from_id(studentid):
+    with Session() as session:
+        return get_student_by(session, studentid=studentid)
+    
+# 전화번호로부터 학생 정보를 가져오는 api 함수 @오버라이드
+@app.route('/api/students/phone/<string:phonenumber>', methods=['GET'])
+def api_get_student_from_phone(phonenumber):
+    with Session() as session:
+        return get_student_by(session, phonenumber=phonenumber)
+    
+# 이름으로부터 학생 정보를 가져오는 api 함수 @오버라이드
+@app.route('/api/students/name/<string:name>', methods=['GET'])
+def api_get_student_from_name(name):
+    with Session() as session:
+        return get_student_by(session, name=name)
+
+# 좌석으로부터 학생 정보를 가져오는 api 함수 @오버라이드
+@app.route('/api/students/seat/<int:seatnumber>', methods=['GET'])
+def api_get_student_from_seat(seatnumber):
+    with Session() as session:
+        return get_student_by(session, seatnumber=seatnumber)
+
 
 # 학생을 등록하는 api 함수
 @app.route('/api/api_add_students', methods=['POST'])
@@ -186,9 +234,9 @@ def remove_session(*args, **kwargs):
 def seats():
     try:
         with Session() as session:
-            students = Students.query.order_by(Students.seatnumber).all()
-            seats_dict={student.seatnumber: student.name for student in students}
-            return seats_dict
+            students = Students.query.order_by(Students.seatnumber).all()   # 좌석번호 순으로 학생 정보를 가져옴
+            seats_dict={student.seatnumber: student.name for student in students}   # 좌석번호와 학생 이름을 딕셔너리로 저장. {좌석번호: 학생이름}. 만약 []로 하면 리스트로 저장됨
+            return seats_dict  
     except Exception as e:
         print("seats() error: " + e)
 

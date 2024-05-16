@@ -1,32 +1,33 @@
 /* 좌석의 스타일 */
 .seat {
-    height: 80px;
+    height: auto;
+    padding: 10px;
+    margin: 3px;
+
     background-color: #f8f9fa;
     border: 1px solid #ddd;
+    
+    text-align: center;
+    white-space: nowrap;
+}
+.spacer {
+    width: 20px;
+}
+
+/* Flexbox 스타일링 */
+.nowrap-row {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 3px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
-/* 마지막 줄을 제외한 모든 행에 간격 추가 */
-.row:not(:last-child) {
-    margin-bottom: 5px;
+/* 좌석의 너비를 조정하기 위해 사용 */
+.nowrap-row > .seat, .nowrap-row > .spacer {
+    flex: 0 0 auto;
 }
 
-/* 모든 컬럼의 패딩을 제거하고, 컬럼의 너비를 조정하기 위해 사용 */
-.col,
-.col-1,
-.col-3 {
-    padding: 0;
-    /* Remove padding for visual alignment */
-}
 
-/* 전체 컨테이너에 대한 패딩 */
-.padded-container {
-    padding-left: 100px;
-    padding-right: 100px;
-}
 
 /* 커스텀 높이 조정 */
 .custom-height {
@@ -39,76 +40,25 @@
 }
 
 
-/* 
-@media (max-width: 768px) {
+/* 모바일 화면에 맞게 크기 조정 */
+@media (max-width: 576px) {
     .seat {
-        margin: 2px;
-        padding: 10px;
+        padding: 5px;
+        margin: 3px;
+        font-size: 12px;
     }
-
-    .custom-height {
-        height: 40px;
+    .spacer {
+        width: 10px;
     }
+}
 
-    .custom-background {
-        background-color: #f0e68c;
-    }
-} */
-
-
-/* 미디어 쿼리 - 작은 화면 (스마트폰 세로 모드) */
-@media (max-width: 480px) {
-    /* 컨테이너 패딩을 최소화 */
-    .padded-container {
-        padding: 0.5rem;
-    }
-
-    /* 좌석 크기를 더 줄임 */
+@media (min-width: 992px) {
     .seat {
-        height: 50px;
-        margin: 1px;
-        font-size: 0.7rem;
+        padding: 15px;
+        margin: 8px;
+        font-size: 15px;
     }
-
-    /* 커스텀 높이도 줄임 */
-    .custom-height {
-        height: 30px;
-    }
-
-    /* 두 줄씩 배치하기 위해 `col-6`을 사용 */
-    .col-1 {
-        flex: 0 0 50%;
-        max-width: 50%;
-    }
-
-    .col {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-
-    /* 줄 간격을 더 줄임 */
-    .row:not(:last-child) {
-        margin-bottom: 2px;
-    }
-}
-
-/* 전체 컨테이너 축소 */
-#seating-layout {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    transform-origin: top left;
-}
-
-/* 미디어 쿼리 - 작은 화면에서 전체 좌석 축소 */
-@media (max-width: 768px) {
-    #seating-layout {
-        transform: scale(0.8);
-    }
-}
-
-@media (max-width: 480px) {
-    #seating-layout {
-        transform: scale(0.6);
+    .spacer {
+        width: 20px;
     }
 }
